@@ -15,10 +15,14 @@ public class SpeedRadar : MonoBehaviour
 
         foreach (Collider col in nearby)
         {
-            if (col.CompareTag("Car") && !entryPositions.ContainsKey(col.gameObject))
+            if (col.gameObject.TryGetComponent(out Vehicle  vehicle) )
             {
-                entryPositions[col.gameObject] = col.transform.position;
-                entryTimes[col.gameObject] = Time.time;
+                if(vehicle != null)
+                {
+                    entryPositions[col.gameObject] = col.transform.position;
+                    entryTimes[col.gameObject] = Time.time;
+
+                }
             }
         }
     }
@@ -27,14 +31,23 @@ public class SpeedRadar : MonoBehaviour
     {
         if (entryPositions.ContainsKey(other.gameObject))
         {
-            float distance = Vector3.Distance(entryPositions[other.gameObject], other.transform.position);
-            float time = Time.time - entryTimes[other.gameObject];
-            float avgSpeed = (distance / time) * 3.6f;
-
-            if (avgSpeed > speedLimit)
+            if (other.gameObject.TryGetComponent(out Vehicle vehicle))
             {
-                Debug.Log($"¡FOTOMULTA! Promedio: {avgSpeed:F1} km/h");
+                if (vehicle != null)
+                {
+                    //Leer la velocidad desde vehicle
+                    //si vel esmayor permitida
+                    //Multa
+                }
             }
+                //float distance = Vector3.Distance(entryPositions[other.gameObject], other.transform.position);
+                //float time = Time.time - entryTimes[other.gameObject];
+                //float avgSpeed = (distance / time) * 3.6f;
+
+            //    if (avgSpeed > speedLimit)
+            //{
+            //    Debug.Log($"¡FOTOMULTA! Promedio: {avgSpeed:F1} km/h");
+            //}
 
             entryPositions.Remove(other.gameObject);
             entryTimes.Remove(other.gameObject);
